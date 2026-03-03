@@ -8,46 +8,53 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  email     String   @unique
-  password  String
-  name      String?
-  bio       String?
-  avatarUrl String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(uuid())
+  username     String   @unique
+  email        String   @unique
+  password     String
+  name         String?
+  bio          String?
+  avatarUrl    String?
+  location     String?
+  instagram    String?
+  spotify      String?
+  website      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  bands     Band[]   @relation("UserBands")
-  likes     Like[]
+  bands        Band[]   @relation("UserBands")
+  likes        Like[]
 }
 
 model Band {
-  id          String   @id @default(uuid())
-  name        String
-  username    String   @unique
-  bio         String?
-  genre       String?
-  avatarUrl   String?
-  coverUrl    String?
-  website     String?
+  id           String   @id @default(uuid())
+  name         String
+  username     String   @unique
+  bio          String?
+  genre        String?
+  avatarUrl    String?
+  coverUrl     String?
+  website      String?
   contactEmail String?
+  location     String?
+  instagram    String?
+  spotify      String?
 
-  ownerId     String
-  owner       User     @relation("UserBands", fields: [ownerId], references: [id])
+  ownerId      String
+  owner        User     @relation("UserBands", fields: [ownerId], references: [id])
 
-  posts       Post[]
-  events      Event[]
+  posts        Post[]
+  events       Event[]
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Post {
   id        String   @id @default(uuid())
   content   String?
   mediaUrl  String?
-  type      String   // 'PHOTO', 'VIDEO', 'REEL'
+  type      String   @default("PHOTO")
 
   bandId    String
   band      Band     @relation(fields: [bandId], references: [id])
@@ -62,10 +69,8 @@ model Like {
   id        String   @id @default(uuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-
   postId    String
   post      Post     @relation(fields: [postId], references: [id])
-
   createdAt DateTime @default(now())
 
   @@unique([userId, postId])
@@ -77,9 +82,7 @@ model Event {
   description String?
   date        DateTime
   location    String?
-
   bandId      String
   band        Band     @relation(fields: [bandId], references: [id])
-
   createdAt   DateTime @default(now())
 }
