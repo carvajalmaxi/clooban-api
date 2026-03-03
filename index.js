@@ -9,8 +9,19 @@ const prisma = new PrismaClient();
 app.use(cors());
 app.use(express.json());
 
+const { exec } = require('child_process');
+
 app.get('/', (req, res) => {
     res.json({ status: 'success', message: 'Clooban API is running!' });
+});
+
+app.get('/setup-db', (req, res) => {
+    exec('npx prisma db push --accept-data-loss', (error, stdout, stderr) => {
+        if (error) {
+            return res.status(500).json({ status: 'error', output: stderr || error.message });
+        }
+        res.json({ status: 'success', output: stdout });
+    });
 });
 
 // --- USUARIOS ---
