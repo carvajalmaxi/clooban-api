@@ -9,6 +9,10 @@ const prisma = new PrismaClient();
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (req, res) => {
+    res.json({ status: 'success', message: 'Clooban API is running!' });
+});
+
 // --- USUARIOS ---
 app.post('/api/users', async (req, res) => {
     try {
